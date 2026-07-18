@@ -24,8 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.ZBOT_GITHUB_PAT }}
-          submodules: 'recursive'
+          submodules: true
 
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
