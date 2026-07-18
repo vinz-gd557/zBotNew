@@ -1,4 +1,4 @@
-name: Build Geode Mod
+name: Build Geode Mod (Android Only)
 
 on:
   workflow_dispatch:
@@ -12,17 +12,17 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - name: Windows
-          os: windows-latest
-          
-        - name: MacOS
-          os: macos-latest
+        - name: Android 32-bit
+          target: android32
+
+        - name: Android 64-bit
+          target: android64
 
     name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.ZBOT_GITHUB_PAT }}
           submodules: 'recursive'
@@ -32,8 +32,9 @@ jobs:
         with:
           combine: true
           cli: "latest"
-          sdk: "nightly"
-      
+          sdk: "v5.7.1"
+          target: ${{ matrix.config.target }}
+
   package:
     name: Package builds
     runs-on: ubuntu-latest
@@ -43,7 +44,7 @@ jobs:
       - uses: geode-sdk/build-geode-mod/combine@main
         id: build
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: Build Output
+          name: zBot-Android-Build
           path: ${{ steps.build.outputs.build-output }}
