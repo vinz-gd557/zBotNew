@@ -24,10 +24,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: false # Kita matiin otomatisasi submodulnya disini
+          submodules: false
 
-      - name: Init Submodules Manually
+      - name: Fix SSH Submodules to HTTPS and Init
         run: |
+          # Paksa git buat ganti skema URL SSH ke HTTPS secara global di runner
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          
+          # Baru jalanin sinkronisasi dan update submodule
+          git submodule sync
           git submodule update --init --recursive --force
 
       - name: Build the mod
