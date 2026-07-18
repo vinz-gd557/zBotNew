@@ -24,7 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: false # Kita matiin otomatisasi submodulnya disini
+
+      - name: Init Submodules Manually
+        run: |
+          git submodule update --init --recursive --force
 
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
